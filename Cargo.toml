@@ -1,0 +1,63 @@
+[package]
+name = "audio-pipeline"
+version = "0.1.0"
+edition = "2021"
+description = "Real-time audio processing for interruption detection"
+license = "MIT"
+repository = "https://github.com/your-org/audio-pipeline"
+
+[lib]
+name = "audio_pipeline"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Core dependencies
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1"
+
+# Audio processing
+rodio = "0.17"
+cpal = "0.15"
+
+# ML inference (ONNX)
+tract-onnx = "0.21"
+
+# GPU acceleration
+cudarc = { version = "0.10", optional = true }
+
+# Python bindings
+pyo3 = { version = "0.20", features = ["extension-module"], optional = true }
+numpy = { version = "0.20", optional = true }
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Logging
+log = "0.4"
+env_logger = "0.11"
+
+# Utilities
+atomic = "0.6"
+
+[dev-dependencies]
+criterion = "0.5"
+tokio-test = "0.4"
+
+[features]
+default = []
+gpu = ["cudarc"]
+python = ["pyo3", "numpy"]
+full = ["gpu", "python"]
+
+[[bench]]
+name = "vad_bench"
+harness = false
+
+[[bench]]
+name = "asr_bench"
+harness = false
+
+[[bench]]
+name = "sentiment_bench"
+harness = false
